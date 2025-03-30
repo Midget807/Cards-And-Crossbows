@@ -1,0 +1,42 @@
+{
+	"schemaVersion": 1,
+	"id": "rubivisus",
+	"version": "${version}",
+	"name": "Cards & Crossbows",
+	"description": "A mod for Rubivisus",
+	"authors": [
+		"Midget807",
+		"Rubivisus"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/cardsncrossbows/icon.png",
+	"environment": "*",
+	"accessWidener" : "cardsncrossbows.accesswidener",
+	"entrypoints": {
+		"main": [
+			"net.midget807.cardsncrossbows.CardsNCrossbowsMain"
+		],
+		"client": [
+			"net.midget807.cardsncrossbows.CardsNCrossbowsClient"
+		],
+		"fabric-datagen": [
+			"net.midget807.cardsncrossbows.CardsNCrossbowsDataGenerator"
+		]
+	},
+	"mixins": [
+		"cardsncrossbows.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

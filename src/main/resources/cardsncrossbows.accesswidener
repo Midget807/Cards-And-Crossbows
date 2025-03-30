@@ -1,0 +1,7 @@
+accessWidener v2 named
+
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity damage D
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity piercedEntities Lit/unimi/dsi/fastutil/ints/IntOpenHashSet;
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity piercingKilledEntities Ljava/util/List;
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity punch I
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity sound Lnet/minecraft/sound/SoundEvent;

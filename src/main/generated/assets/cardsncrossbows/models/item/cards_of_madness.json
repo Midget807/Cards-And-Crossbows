@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cardsncrossbows:item/cards_of_madness"
+  }
+}
