@@ -1,23 +1,36 @@
 package net.midget807.cardsncrossbows.entity.custom;
 
 import net.midget807.cardsncrossbows.item.ModItems;
+import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.Collection;
+import java.util.function.Predicate;
 
 public class CardOfMadnessEntity extends ThrownItemEntity {
     public CardOfMadnessEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
@@ -30,6 +43,7 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
 
     public CardOfMadnessEntity(EntityType<? extends ThrownItemEntity> entityType, LivingEntity livingEntity, World world) {
         super(entityType, livingEntity, world);
+        this.setOwner(livingEntity);
     }
 
     @Override
@@ -65,10 +79,26 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
     @Override
     public boolean damage(DamageSource source, float amount) {
         Entity entity = source.getSource();
+        NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(this.getWorld(), (LivingEntity) this.getOwner());
+        LivingEntity owner = (LivingEntity) this.getOwner();
+        this.discard();
         if (entity instanceof ArrowEntity) {
-            entity.discard();
-            this.getWorld().spawnEntity(new CowEntity(EntityType.COW, this.getWorld()));
-            this.discard();
+            Vec3d arrowVec = entity.getVelocity();
+            Vec3d arrowPos = entity.getPos();
+            LivingEntity target;
+            if (owner != null) {
+                Predicate<Entity> predicate = entity2 -> !entity2.isSpectator() && !((PlayerEntity)entity2).isCreative() && entity2 != owner;
+                target = owner.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(), 20, predicate);
+
+                if (target != null) {
+                    nonVecScalingArrow.setDamage(arrowVec.length() * nonVecScalingArrow.damage);
+                    nonVecScalingArrow.setPosition(arrowPos);
+                    //nonVecScalingArrow.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, target.getEyePos());
+                    //nonVecScalingArrow.setVelocity(owner, nonVecScalingArrow.getPitch(), nonVecScalingArrow.getYaw(), 0.0f, 10.0f, 0.0f);
+                    target.getWorld().spawnEntity(nonVecScalingArrow);
+                    entity.discard();
+                }
+            }
         }
         return false;
     }

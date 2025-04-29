@@ -9,10 +9,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.potion.Potion;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.MathHelper;
@@ -20,23 +23,25 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
+import java.util.Set;
 
-public class NonVecScalingArrow extends ArrowEntity {
-    public NonVecScalingArrow(EntityType<? extends ArrowEntity> entityType, World world) {
+public class NonVecScalingArrowEntity extends ArrowEntity {
+    public NonVecScalingArrowEntity(EntityType<? extends ArrowEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public NonVecScalingArrow(World world, double x, double y, double z) {
+    public NonVecScalingArrowEntity(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
-    public NonVecScalingArrow(World world, LivingEntity owner) {
+    public NonVecScalingArrowEntity(World world, LivingEntity owner) {
         super(world, owner);
+        this.setOwner(owner);
     }
     
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
-        /*Entity entity = entityHitResult.getEntity();
+        Entity entity = entityHitResult.getEntity();
         float f = 1;
         int i = MathHelper.ceil(MathHelper.clamp(f * this.damage, 0.0, 2.147483647E9));
         if (this.getPierceLevel() > 0) {
@@ -137,6 +142,20 @@ public class NonVecScalingArrow extends ArrowEntity {
 
                 this.discard();
             }
-        }*/
+        }
     }
+
+    @Override
+    public void tick() {
+        if (this.getWorld().isClient) {
+            super.tick();
+            this.getWorld().addParticle(ParticleTypes.WAX_ON, this.getX(), this.getY() + 0.5, this.getZ(), 0.0, 0.0, 0.0);
+        }
+    }
+
+    @Override
+    public boolean hasNoGravity() {
+        return true;
+    }
+
 }

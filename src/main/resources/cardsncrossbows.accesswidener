@@ -5,3 +5,10 @@ accessible field net/minecraft/entity/projectile/PersistentProjectileEntity pier
 accessible field net/minecraft/entity/projectile/PersistentProjectileEntity piercingKilledEntities Ljava/util/List;
 accessible field net/minecraft/entity/projectile/PersistentProjectileEntity punch I
 accessible field net/minecraft/entity/projectile/PersistentProjectileEntity sound Lnet/minecraft/sound/SoundEvent;
+accessible field net/minecraft/entity/projectile/ArrowEntity potion Lnet/minecraft/potion/Potion;
+accessible field net/minecraft/entity/projectile/ArrowEntity effects Ljava/util/Set;
+accessible field net/minecraft/entity/projectile/ArrowEntity colorSet Z
+accessible field net/minecraft/entity/projectile/ArrowEntity PARTICLE_EFFECT_STATUS B
+accessible field net/minecraft/entity/projectile/ArrowEntity COLOR Lnet/minecraft/entity/data/TrackedData;
+accessible field net/minecraft/entity/projectile/ArrowEntity NO_POTION_COLOR I
+accessible field net/minecraft/entity/projectile/ArrowEntity MAX_POTION_DURATION_TICKS I
