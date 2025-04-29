@@ -1,26 +1,25 @@
 package net.midget807.cardsncrossbows.entity.custom;
 
-import net.midget807.cardsncrossbows.entity.ModEntities;
 import net.midget807.cardsncrossbows.item.ModItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.function.Predicate;
-
 public class CardOfMadnessEntity extends ThrownItemEntity {
-
     public CardOfMadnessEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -29,8 +28,8 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
         super(entityType, d, e, f, world);
     }
 
-    public CardOfMadnessEntity(World world, LivingEntity livingEntity) {
-        super(ModEntities.CARD_OF_MADNESS, livingEntity, world);
+    public CardOfMadnessEntity(EntityType<? extends ThrownItemEntity> entityType, LivingEntity livingEntity, World world) {
+        super(entityType, livingEntity, world);
     }
 
     @Override
@@ -42,32 +41,35 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        if (entity instanceof ArrowEntity arrowEntity) {
-            if (!arrowEntity.isOnGround()) {
-                int i = MathHelper.ceil(MathHelper.clamp(arrowEntity.getDamage() * arrowEntity.getVelocity().length(), 0.0, 2.147483647E9));
-                Predicate<LivingEntity> predicate = livingEntity -> livingEntity != this.getOwner() && livingEntity instanceof PlayerEntity && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(livingEntity);
-                TargetPredicate targetPredicate = TargetPredicate.createAttackable().setPredicate(predicate);
-                PlayerEntity playerEntity = this.getWorld().getClosestPlayer(targetPredicate, null);
-                if (playerEntity != null) {
-                    NonVecScalingArrow nonVecScalingArrow = new NonVecScalingArrow(this.getWorld(), (LivingEntity) this.getOwner());
-                    nonVecScalingArrow.setDamage(i);
-                    nonVecScalingArrow.setVelocity(playerEntity.getPos().subtract(this.getPos()));
-                    nonVecScalingArrow.setVelocity(nonVecScalingArrow.getVelocity().multiply(100));
-                    entity.discard();
-                    this.getWorld().spawnEntity(nonVecScalingArrow);
-                }
-            }
-        } else {
-            entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 1.0f);
+        if (entity instanceof ArrowEntity) {
+            entity.discard();
         }
+        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 1.0f);
+        this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.ENTITY_SLIME_SQUISH_SMALL, SoundCategory.PLAYERS, 0.25f, 0.75f);
+        this.discard();
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
-        if (!this.getWorld().isClient) {
-            this.getWorld().sendEntityStatus(this, EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES);
+    protected void onBlockHit(BlockHitResult blockHitResult) {
+        super.onBlockHit(blockHitResult);
+        this.getWorld().spawnEntity(new ItemEntity(this.getWorld(), this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.CARDS_OF_MADNESS), 0.0, 0.1, 0.0));
+        this.getWorld().playSound(null, this.getBlockPos(), SoundEvents.ENTITY_SLIME_SQUISH_SMALL, SoundCategory.NEUTRAL, 0.25f, MathHelper.clamp(this.getWorld().getRandom().nextFloat(), 0.7f, 0.85f));
+        this.discard();
+    }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return true;
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        Entity entity = source.getSource();
+        if (entity instanceof ArrowEntity) {
+            entity.discard();
+            this.getWorld().spawnEntity(new CowEntity(EntityType.COW, this.getWorld()));
             this.discard();
         }
+        return false;
     }
 }

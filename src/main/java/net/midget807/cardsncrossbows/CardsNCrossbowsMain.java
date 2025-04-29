@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.midget807.cardsncrossbows.command.ModCommands;
 import net.midget807.cardsncrossbows.effect.ModEffects;
 import net.midget807.cardsncrossbows.entity.ModEntities;
+import net.midget807.cardsncrossbows.item.ModItemGroups;
 import net.midget807.cardsncrossbows.item.ModItems;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class CardsNCrossbowsMain implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
+		ModItemGroups.registerModItemGroups();
 		ModEntities.registerModEntities();
 		ModEffects.registerModEffects();
 		ModCommands.registerModCommands();

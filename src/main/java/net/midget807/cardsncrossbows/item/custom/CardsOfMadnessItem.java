@@ -1,5 +1,6 @@
 package net.midget807.cardsncrossbows.item.custom;
 
+import net.midget807.cardsncrossbows.entity.ModEntities;
 import net.midget807.cardsncrossbows.entity.custom.CardOfMadnessEntity;
 import net.midget807.cardsncrossbows.item.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,9 +23,8 @@ public class CardsOfMadnessItem extends Item {
         ItemStack itemStack = user.getStackInHand(hand);
         world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClient) {
-            CardOfMadnessEntity cardOfMadnessEntity = new CardOfMadnessEntity(world, user);
-            cardOfMadnessEntity.setItem(new ItemStack(ModItems.CARD_OF_MADNESS));
-            cardOfMadnessEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1.0f, 0.25f);
+            CardOfMadnessEntity cardOfMadnessEntity = new CardOfMadnessEntity(ModEntities.CARD_OF_MADNESS, user, world);
+            cardOfMadnessEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0f, 1.0f, 0.125f);
             world.spawnEntity(cardOfMadnessEntity);
         }
         user.incrementStat(Stats.USED.getOrCreateStat(this));

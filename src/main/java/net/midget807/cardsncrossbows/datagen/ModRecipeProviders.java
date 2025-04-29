@@ -34,7 +34,7 @@ public class ModRecipeProviders extends FabricRecipeProvider {
                 .criterion(hasItem(Items.WITHER_ROSE), conditionsFromItem(Items.WITHER_ROSE))
                 .offerTo(consumer, CardsNCrossbowsMain.id(getRecipeName(ModItems.MANIC_VESSEL)));
 
-        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.CARDS_OF_MADNESS, 8)
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.CARDS_OF_MADNESS, 13)
                 .pattern("NPP")
                 .pattern("GMP")
                 .pattern("LGN")
