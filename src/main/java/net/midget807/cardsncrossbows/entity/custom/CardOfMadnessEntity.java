@@ -2,6 +2,8 @@ package net.midget807.cardsncrossbows.entity.custom;
 
 import net.midget807.cardsncrossbows.item.ModItems;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -13,6 +15,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -79,10 +82,8 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
     @Override
     public boolean damage(DamageSource source, float amount) {
         Entity entity = source.getSource();
-        NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(this.getWorld(), (LivingEntity) this.getOwner());
         LivingEntity owner = (LivingEntity) this.getOwner();
-        this.discard();
-        if (entity instanceof ArrowEntity) {
+        if (entity instanceof PersistentProjectileEntity) {
             Vec3d arrowVec = entity.getVelocity();
             Vec3d arrowPos = entity.getPos();
             LivingEntity target;
@@ -91,15 +92,21 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
                 target = owner.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(), 20, predicate);
 
                 if (target != null) {
-                    nonVecScalingArrow.setDamage(arrowVec.length() * nonVecScalingArrow.damage);
+                    this.discard();
+                    NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(this.getWorld(), owner);
                     nonVecScalingArrow.setPosition(arrowPos);
-                    //nonVecScalingArrow.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, target.getEyePos());
-                    //nonVecScalingArrow.setVelocity(owner, nonVecScalingArrow.getPitch(), nonVecScalingArrow.getYaw(), 0.0f, 10.0f, 0.0f);
-                    target.getWorld().spawnEntity(nonVecScalingArrow);
-                    entity.discard();
+                    nonVecScalingArrow.setVelocity(0, 0, 0);
+                    nonVecScalingArrow.setDamage(arrowVec.length() * 2.0f);
+                    nonVecScalingArrow.setNoGravity(true);
+                    nonVecScalingArrow.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, target.getEyePos());
+                    nonVecScalingArrow.setPitch(nonVecScalingArrow.getPitch());
+                    nonVecScalingArrow.setYaw(nonVecScalingArrow.getYaw());
+                    nonVecScalingArrow.setVelocity(owner, nonVecScalingArrow.getPitch(), nonVecScalingArrow.getYaw(), 0.0f, 1.0f, 0.0f);
+                    nonVecScalingArrow.setShouldUpdateRotation(false);
+                    owner.getWorld().spawnEntity(nonVecScalingArrow);
                 }
             }
         }
-        return false;
+        return true;
     }
 }

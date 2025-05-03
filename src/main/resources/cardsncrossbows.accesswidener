@@ -12,3 +12,9 @@ accessible field net/minecraft/entity/projectile/ArrowEntity PARTICLE_EFFECT_STA
 accessible field net/minecraft/entity/projectile/ArrowEntity COLOR Lnet/minecraft/entity/data/TrackedData;
 accessible field net/minecraft/entity/projectile/ArrowEntity NO_POTION_COLOR I
 accessible field net/minecraft/entity/projectile/ArrowEntity MAX_POTION_DURATION_TICKS I
+accessible field net/minecraft/entity/projectile/ProjectileEntity shot Z
+accessible field net/minecraft/entity/projectile/ProjectileEntity leftOwner Z
+accessible field net/minecraft/entity/projectile/PersistentProjectileEntity inBlockState Lnet/minecraft/block/BlockState;
+accessible method net/minecraft/entity/projectile/PersistentProjectileEntity shouldFall ()Z
+accessible method net/minecraft/entity/projectile/PersistentProjectileEntity fall ()V
+accessible method net/minecraft/entity/projectile/ProjectileEntity shouldLeaveOwner ()Z
