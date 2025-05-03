@@ -153,9 +153,6 @@ public class NonVecScalingArrowEntity extends ArrowEntity {
 
     @Override
     public void tick() {
-        if (this.getWorld().isClient) {
-            this.getWorld().addParticle(ParticleTypes.WAX_ON, this.getX(), this.getY() + 0.5, this.getZ(), 0.0, 0.0, 0.0);
-        }
         this.baseTick();
         if (!this.shot) {
             this.emitGameEvent(GameEvent.PROJECTILE_SHOOT, this.getOwner());
@@ -289,6 +286,11 @@ public class NonVecScalingArrowEntity extends ArrowEntity {
             this.checkBlockCollision();
             if (this.age == 400) {
                 this.discard();
+            }
+        }
+        if (this.getWorld().isClient) {
+            for (int i = 0; i < 2; i++) {
+                this.getWorld().addParticle(ParticleTypes.WAX_ON, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), 0.0, 0.0, 0.0);
             }
         }
     }

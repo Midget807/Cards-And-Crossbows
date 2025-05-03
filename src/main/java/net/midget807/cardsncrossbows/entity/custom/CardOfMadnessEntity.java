@@ -93,7 +93,7 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
 
                 if (target != null) {
                     this.discard();
-                    NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(this.getWorld(), owner);
+                    NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(owner.getWorld(), owner);
                     nonVecScalingArrow.setPosition(arrowPos);
                     nonVecScalingArrow.setVelocity(0, 0, 0);
                     nonVecScalingArrow.setDamage(arrowVec.length() * 2.0f);
