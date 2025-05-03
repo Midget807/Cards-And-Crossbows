@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "M": {
+      "item": "cardsncrossbows:manic_vessel"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "NPP",
+    "GMP",
+    "LGN"
+  ],
+  "result": {
+    "count": 13,
+    "item": "cardsncrossbows:cards_of_madness"
+  },
+  "show_notification": true
+}
