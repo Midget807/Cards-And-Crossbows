@@ -33,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class CardOfMadnessEntity extends ThrownItemEntity {
@@ -88,10 +89,13 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
             Vec3d arrowPos = entity.getPos();
             LivingEntity target;
             if (owner != null) {
-                Predicate<Entity> predicate = entity2 -> !entity2.isSpectator() && !((PlayerEntity)entity2).isCreative() && entity2 != owner;
-                target = owner.getWorld().getClosestPlayer(entity.getX(), entity.getY(), entity.getZ(), 20, predicate);
+                Predicate<Entity> entityPredicate = entity2 -> !entity2.isSpectator() && entity2 != owner;
+                target = this.getNearestTargetPreferPlayers(this, this.getX(), this.getY(), this.getZ(), 20, entityPredicate);
 
                 if (target != null) {
+                    if (this.getWorld().isClient) {
+                        owner.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.15f);
+                    }
                     this.discard();
                     NonVecScalingArrowEntity nonVecScalingArrow = new NonVecScalingArrowEntity(owner.getWorld(), owner);
                     nonVecScalingArrow.setPosition(arrowPos);
@@ -108,5 +112,28 @@ public class CardOfMadnessEntity extends ThrownItemEntity {
             }
         }
         return true;
+    }
+
+    public LivingEntity getNearestTargetPreferPlayers(Entity source, double x, double y, double z, double maxDistance, Predicate<Entity> predicate) {
+        double d = -1.0;
+        LivingEntity target = null;
+
+        List<LivingEntity> livingEntities = source.getWorld().getEntitiesByClass(LivingEntity.class, source.getBoundingBox().expand(maxDistance), predicate);
+        List<PlayerEntity> playerEntities = source.getWorld().getEntitiesByClass(PlayerEntity.class, source.getBoundingBox().expand(maxDistance), predicate);
+        if (!playerEntities.isEmpty()) {
+            predicate = entity2 -> !entity2.isSpectator() && !((PlayerEntity)entity2).isCreative() && entity2 != this.getOwner();
+        }
+
+        for (LivingEntity livingEntity : playerEntities.isEmpty() ? livingEntities : playerEntities) {
+            if (predicate == null || predicate.test(livingEntity)) {
+                double squaredDistanceTo = livingEntity.squaredDistanceTo(x, y, z);
+                if ((maxDistance < 0.0 || squaredDistanceTo < maxDistance * maxDistance) && (d == -1.0 || squaredDistanceTo < d)) {
+                    d = squaredDistanceTo;
+                    target = livingEntity;
+                }
+            }
+        }
+
+        return target;
     }
 }

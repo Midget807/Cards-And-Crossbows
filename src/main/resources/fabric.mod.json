@@ -9,8 +9,8 @@
 		"Rubivisus"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Midget807/Cards-And-Crossbows",
+		"issues": "https://github.com/Midget807/Cards-And-Crossbows/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/cardsncrossbows/icon.png",

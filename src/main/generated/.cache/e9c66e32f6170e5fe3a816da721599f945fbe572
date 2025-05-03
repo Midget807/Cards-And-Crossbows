@@ -1,5 +1,5 @@
-// 1.20.1	2025-03-31T01:02:32.3378563	Cards & Crossbows/Recipes
-198e548fe324ebc90a47750d7a33c18338917dbc data\rubivisus\advancements\recipes\tools\manic_vessel.json
-ee6b770d505a1ecb5a4ff5f926a87676b1077853 data\rubivisus\advancements\recipes\combat\cards_of_madness.json
-52bf95db9b5ab4d9bdefa728144faaa93541849b data\rubivisus\recipes\manic_vessel.json
-f19edb0bb449bbae29bc429ead80b1913b475b26 data\rubivisus\recipes\cards_of_madness.json
+// 1.20.1	2025-05-03T20:35:54.4242231	Cards & Crossbows/Recipes
+198e548fe324ebc90a47750d7a33c18338917dbc data\cardsncrossbows\advancements\recipes\tools\manic_vessel.json
+432ec9184abe6e0de0e34cacc7cb19bf7d3eeea1 data\cardsncrossbows\recipes\cards_of_madness.json
+ee6b770d505a1ecb5a4ff5f926a87676b1077853 data\cardsncrossbows\advancements\recipes\combat\cards_of_madness.json
+52bf95db9b5ab4d9bdefa728144faaa93541849b data\cardsncrossbows\recipes\manic_vessel.json
